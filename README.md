@@ -2,13 +2,21 @@
 
 A high-performance algorithmic pipeline designed to filter bank transactions at scale. This system chains multiple algorithms to provide an "instant" gatekeeper for safe transactions while escalating suspicious outliers for statistical analysis.
 
-## 🚀 Project Overview
+---
+DS1AL Project
+
+Student:
+- Aldaheir Leonardo
+- Truong Giang Do
+---
+
+## Project Overview
 This project was designed to solve the challenge of processing thousands of transactions per second. It uses a three-stage algorithmic chain:
 1.  **Gatekeeper (Filter)**: Fast $O(1)$ lookup for known-safe patterns.
 2.  **Streaming Aggregator**: Maintains per-account statistics in $O(1)$ time.
 3.  **Anomaly Scorer**: Computes risk scores and tracks Top-K outliers using a **Min-Heap**.
 
-## 📂 Project Structure
+## Project Structure
 ```text
 .
 ├── main.py                 # Entry point for the system
@@ -22,7 +30,7 @@ This project was designed to solve the challenge of processing thousands of tran
 └── README.md               # This file
 ```
 
-## 🛠️ Installation & Usage
+## Installation & Usage
 Requires **Python 3.7+**. No external dependencies.
 
 ### Running the system:
@@ -36,7 +44,7 @@ To see detailed scoring and internal state:
 python3 main.py --debug generated_transactions.csv
 ```
 
-## 🧠 Algorithmic Deep Dive
+## Algorithmic Deep Dive
 
 ### Stage 1: Gatekeeper (Algorithm A)
 - **Data Structure**: Hash Sets/Maps (`set`, `dict`).
@@ -53,8 +61,10 @@ python3 main.py --debug generated_transactions.csv
 - **Complexity**: $O(1)$ for score, $O(\log K)$ to update Top-K.
 - **Rationale**: The **Min-Heap** allows us to maintain a live list of the most suspicious transactions without sorting the entire dataset.
 
-## ⚠️ System Bottlenecks
-The primary bottleneck is **Memory usage**. Since the system maintains state for every unique account in a Hash Map, memory scales as $O(N)$ where $N$ is the number of accounts. For production use, an LRU (Least Recently Used) cache or TTL-based eviction would be required to manage RAM limits.
+### Data Transformation & Chaining
+The system demonstrates a clear data flow where the output of one stage informs or enables the next:
+1.  **Stage A → Stage C (Control Signal)**: The Gatekeeper (Algorithm A) identifies transactions that match trusted patterns. Its output is a boolean flag that determines if the compute-intensive Anomaly Scorer (Algorithm C) is invoked.
+2.  **Stage B → Stage C (State Input)**: The Streaming Aggregator (Algorithm B) transforms a sequence of raw transactions into a condensed `AccountStats` object. This summarized state (mean, variance, velocity) serves as the primary input for Algorithm C to calculate the Z-score.
 
----
-*Created for the Algorithmic Systems Design project.*
+## System Bottlenecks
+The primary bottleneck is **Memory usage**. Since the system maintains state for every unique account in a Hash Map, memory scales as $O(N)$ where $N$ is the number of accounts. For production use, an LRU (Least Recently Used) cache or TTL-based eviction would be required to manage RAM limits.
