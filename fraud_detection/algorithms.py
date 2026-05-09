@@ -89,7 +89,7 @@ class FraudGatekeeperSystem:
         if velocity > self.velocity_threshold_per_minute:
             reasons.append(f"VELOCITY_SPIKE({velocity})")
 
-        score = z + (2.0 if velocity > self.velocity_threshold_per_minute else 0.0)
+        score = z + (3.0 if velocity > self.velocity_threshold_per_minute else 0.0)
         
         # Maintain Top-K suspicious in O(log K)
         if score > 0:

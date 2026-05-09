@@ -3,14 +3,12 @@
   "safe_pairs": [["A7", "COFFEE_03"]],
   "merchant_limits": {
     "COFFEE_03": 100.0,
-    "GROCERY_17": 200.0,
-    "TRANSPORT_01": 150.0,
-    "FUEL_12": 300.0
+    "GROCERY_17": 200.0
   },
   "ewma_alpha": 0.2,
-  "velocity_threshold_per_minute": 8,
+  "velocity_threshold_per_minute": 5,
   "min_history_for_zscore": 3,
-  "cold_start_review_amount": 500.0,
-  "review_threshold": 3.0,
-  "block_threshold": 6.0
+  "cold_start_review_amount": 400.0,
+  "review_threshold": 2.0,
+  "block_threshold": 4.0
 }
